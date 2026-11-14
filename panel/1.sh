@@ -34,6 +34,25 @@ show_header() {
     echo -e "${GRAY}────────────────────────────────────────────────────────────${NC}"
 }
 
+run_remote() {
+    local url="$1" tmp
+    tmp=$(mktemp) || return 1
+    if ! curl -fLsS "$url" -o "$tmp"; then
+        echo -e "  ${RED}✘ Download failed: $url${NC}"
+        rm -f "$tmp"
+        return 1
+    fi
+    if [[ ! -s "$tmp" ]]; then
+        echo -e "  ${RED}✘ Downloaded script is empty: $url${NC}"
+        rm -f "$tmp"
+        return 1
+    fi
+    bash "$tmp"
+    local status=$?
+    rm -f "$tmp"
+    return "$status"
+}
+
 # --- OMNI-GRID MENU ---
 panel_menu() {
     while true; do
@@ -54,37 +73,37 @@ panel_menu() {
 
         case $p in
             1)  echo -e "  ${CYAN}➜ Executing Pterodactyl Routine...${NC}"
-                bash <(curl -s https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/Extension-Hub/refs/heads/main/panel/pterodactyl/run.sh) 
+                run_remote "https://raw.githubusercontent.com/alokgame2009-bot/Extension-Hub/main/panel/pterodactyl/run.sh" 
                 pause ;;
             2)  echo -e "  ${CYAN}➜ Executing [] Routine...${NC}"
-                bash <(curl -s https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/Extension-Hub/refs/heads/main/panel/NovaStudio/run.sh) 
+                echo -e "  ${RED}✘ NovaStudio installer is not present in this repository yet.${NC}" 
                 pause ;;
             3)  echo -e "  ${CYAN}➜ Executing [] Routine...${NC}"
-                bash <(curl -s )
+                echo -e "  ${RED}✘ Installer for this module is not present in this repository yet.${NC}"
                 pause ;;
             4)  echo -e "  ${CYAN}➜ Executing [] Routine...${NC}"
-                bash <(curl -s https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/Extension-Hub/refs/heads/main/panel/reviactyl/run.sh)
+                run_remote "https://raw.githubusercontent.com/alokgame2009-bot/Extension-Hub/main/panel/reviactyl/run.sh"
                 pause ;;
             5)  echo -e "  ${CYAN}➜ Executing [] Routine...${NC}"
-                bash <(curl -s ) 
+                echo -e "  ${RED}✘ Installer for this module is not present in this repository yet.${NC}" 
                 pause ;;
             6)  echo -e "  ${CYAN}➜ Executing paymenter Routine...${NC}"
-                bash <(curl -s https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/Extension-Hub/refs/heads/main/panel/paymenter/run.sh) 
+                run_remote "https://raw.githubusercontent.com/alokgame2009-bot/Extension-Hub/main/panel/paymenter/run.sh" 
                 pause ;;
             7)  echo -e "  ${CYAN}➜ Executing Convoy Routine...${NC}"
-                bash <(curl -s https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/hub/refs/heads/main/Codinghub/panel/convoy/run.sh) 
+                run_remote "https://raw.githubusercontent.com/alokgame2009-bot/Extension-Hub/main/panel/Convoy/install.sh" 
                 pause ;;
             8)  echo -e "  ${CYAN}➜ Executing [] Routine...${NC}"
-                bash <(curl -s ) 
+                echo -e "  ${RED}✘ Installer for this module is not present in this repository yet.${NC}" 
                 pause ;;
             9)  echo -e "  ${CYAN}➜ Executing [] Routine...${NC}"
-                bash <(curl -s https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/Extension-Hub/refs/heads/main/panel/mythical/run.sh) 
+                run_remote "https://raw.githubusercontent.com/alokgame2009-bot/Extension-Hub/main/panel/mythical/run.sh" 
                 pause ;;
             10) echo -e "  ${CYAN}➜ Executing Tools Routine...${NC}"
-                bash <(curl -s ) 
+                echo -e "  ${RED}✘ Installer for this module is not present in this repository yet.${NC}" 
                 pause ;;
             11) echo -e "  ${CYAN}➜ Executing Tools Routine...${NC}"
-                bash <(curl -s ) 
+                echo -e "  ${RED}✘ Installer for this module is not present in this repository yet.${NC}" 
                 pause ;;
             0)  echo -e "\n  ${RED}Shutting down Uplink. Goodbye!${NC}"
                 exit 0 ;;
