@@ -44,6 +44,20 @@ pause() {
     read -p "  Press [Enter] to return to main menu..."
 }
 
+run_remote() {
+    local url="$1" tmp status
+    tmp=$(mktemp) || return 1
+    if ! curl -fLsS "$url" -o "$tmp" || [[ ! -s "$tmp" ]]; then
+        echo -e "  ${RED}✘ Unable to download installer: $url${NC}"
+        rm -f "$tmp"
+        return 1
+    fi
+    bash "$tmp"
+    status=$?
+    rm -f "$tmp"
+    return "$status"
+}
+
 # ================== INSTALL FUNCTION ==================
 install_ptero() {
     show_header "PANEL INSTALLATION"
@@ -52,7 +66,7 @@ install_ptero() {
     sleep 1
     
     # Run the external script
-    bash <(curl -s https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/Extension-Hub/refs/heads/main/panel/pterodactyl/install.sh)
+    run_remote "https://raw.githubusercontent.com/alokgame2009-bot/Extension-Hub/main/panel/pterodactyl/install.sh"
     
     echo ""
     status_msg "OK" "Installation Sequence Complete."
@@ -372,9 +386,9 @@ while true; do
         1) install_ptero ;;
         2) create_user ;;
         3) update_panel ;;
-        4) bash <(curl -fsSL https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/Extension-Hub/refs/heads/main/panel/pterodactyl/ssl.sh) ;;
+        4) bash <(curl -fsSL https://raw.githubusercontent.com/alokgame2009-bot/Extension-Hub/main/panel/pterodactyl/ssl.sh) ;;
         5) uninstall_ptero ;;
-        6) bash <(curl -fsSL https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/Extension-Hub/refs/heads/main/panel/pterodactyl/phpMyAdmin.sh) ;;
+        6) bash <(curl -fsSL https://raw.githubusercontent.com/alokgame2009-bot/Extension-Hub/main/panel/pterodactyl/phpMyAdmin.sh) ;;
         0) clear; exit ;;
         *) echo -e "${RED}  Invalid option selected...${NC}"; sleep 1 ;;
     esac
